@@ -24,15 +24,16 @@ public class Grid : MonoBehaviour
         foreach (PathNode node in grid)
         {
             //  Пока что считаем все вершины проходимыми, без учёта препятствий
-            node.walkable = true;
-            /*node.walkable = !Physics.CheckSphere(node.body.transform.position, 1);
+            //node.walkable = true;
+            // Учитываем препятствия
+            node.walkable = !Physics.CheckSphere(node.body.transform.position, 1);
             if (node.walkable)
                 node.Fade();
             else
             {
-                node.Illuminate();
+                node.IlluminateWrong();
                 Debug.Log("Not walkable!");
-            }*/
+            }
         }
     }
 
@@ -109,11 +110,14 @@ public class Grid : MonoBehaviour
             //  Получаем список соседей
             var neighbours = GetNeighbours(current);
             foreach (var node in neighbours)
+                //Волновой
                 if(grid[node.x, node.y].walkable && grid[node.x, node.y].Distance > grid[current.x, current.y].Distance + PathNode.Dist(grid[node.x, node.y], grid[current.x, current.y]))
                 {
                     grid[node.x, node.y].ParentNode = grid[current.x, current.y];
                     nodes.Enqueue(node);
                 }
+                //Дейкстра
+                
         }
         //  Восстанавливаем путь от целевой к стартовой
         var pathElem = grid[finishNode.x, finishNode.y];
@@ -129,7 +133,7 @@ public class Grid : MonoBehaviour
     {
         //  Чтобы не вызывать этот метод каждый кадр, устанавливаем интервал вызова в 1000 кадров
         if (Time.frameCount < updateAtFrame) return;
-        updateAtFrame = Time.frameCount + 1000;
+        updateAtFrame = Time.frameCount + 100;
 
         calculatePath(new Vector2Int(0, 0), new Vector2Int(grid.GetLength(0)-1, grid.GetLength(1)-1));
     }

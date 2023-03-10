@@ -78,6 +78,14 @@ public class PathNode //: MonoBehaviour
     {
         body.GetComponent<Renderer>().material.color = Color.red;
     }
+
+    /// <summary>
+    /// Подсветить вершину - перекрасить в чёрный
+    /// </summary>
+    public void IlluminateWrong()
+    {
+        body.GetComponent<Renderer>().material.color = Color.black;
+    }
     
     /// <summary>
     /// Снять подсветку с вершины - перекрасить в синий
